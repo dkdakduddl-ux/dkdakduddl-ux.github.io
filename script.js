@@ -32,14 +32,15 @@ const trackTitle = document.querySelector('#track-title');
 const trackCredit = document.querySelector('#track-credit');
 const trackNumber = document.querySelector('#track-number');
 const trackPosition = document.querySelector('#track-position');
+const soundHeading = document.querySelector('#sound-heading');
 
 const tracks = [
-  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', src: 'track-musinsa-a.mp3' },
-  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', src: 'track-musinsa-b.mp3' },
-  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', src: 'track-frontis-a.mp3' },
-  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', src: 'track-frontis-b.mp3' },
-  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', src: 'track-codeblack-a.mp3' },
-  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', src: 'track-codeblack-b.mp3' }
+  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_A', src: 'track-musinsa-a.mp3' },
+  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_B', src: 'track-musinsa-b.mp3' },
+  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_A', src: 'track-frontis-a.mp3' },
+  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_B', src: 'track-frontis-b.mp3' },
+  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', heading: 'CODE BLACK OST_A', src: 'track-codeblack-a.mp3' },
+  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.mp3' }
 ];
 
 let activeTrackIndex = 0;
@@ -61,6 +62,7 @@ function updateTrack(index, autoplay = false) {
   }
   if (trackTitle) trackTitle.textContent = `${track.title} · ${track.version}`;
   if (trackCredit) trackCredit.textContent = `${track.work} · 땅콩마미`;
+  if (soundHeading) soundHeading.textContent = track.heading;
   if (trackNumber) trackNumber.textContent = `TRACK ${String(index + 1).padStart(2, '0')}`;
   if (trackPosition) trackPosition.textContent = `${String(index + 1).padStart(2, '0')} / ${String(tracks.length).padStart(2, '0')}`;
   trackSelector?.querySelectorAll('button').forEach((button, buttonIndex) => {
