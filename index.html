@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>봄의 사운드 아카이브</title>
+  <meta name="description" content="이야기와 이미지, 소리를 기록하는 봄의 다크 크리에이티브 아카이브.">
+  <meta property="og:title" content="BOM ARCHIVE">
+  <meta property="og:description" content="STORIES · SOUND · WORLDS">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dkdakduddl-ux.github.io/">
+  <meta property="og:image" content="https://dkdakduddl-ux.github.io/og.png">
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="BOM Archive 처음으로"><span class="brand-mark"><i>B</i></span><span>BOM ARCHIVE</span></a>
+      <nav aria-label="주요 메뉴"><a href="#works">작품</a><a href="#sound">음원</a><a href="#about">작가</a></nav>
+      <span class="issue">ISSUE 001</span>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="hero-art" aria-hidden="true"></div><div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow"><span></span> INDEPENDENT STORY &amp; SOUND ARCHIVE</p>
+        <h1>이야기는<br>어둠 속에서<br><em>더 선명해진다.</em></h1>
+        <p class="hero-copy">세계관과 인물, 이미지와 소리를 한곳에 기록합니다.<br>봄의 창작물이 머무는 개인 아카이브.</p>
+        <div class="hero-actions"><a class="button primary" href="#works">작품 보기 <span>↗</span></a><a class="button ghost" href="#sound">음원 듣기 <span>▶</span></a></div>
+      </div>
+      <div class="hero-side" aria-hidden="true"><span>VOL. 01</span><i></i><span>2026</span></div>
+      <div class="scroll-note"><span>SCROLL TO EXPLORE</span><i></i></div>
+    </section>
+
+    <section class="works section-shell" id="works">
+      <div class="section-heading">
+        <div><p class="eyebrow"><span></span> SELECTED WORLDS</p><h2>작품 기록</h2></div>
+        <p>서로 다른 시대와 세계.<br>그 안에서 끝까지 살아남는 사람들.</p>
+      </div>
+      <div class="work-grid">
+        <article class="work-card crimson featured">
+          <div class="card-no">01</div><div class="card-visual" aria-hidden="true"><div class="slash"></div><span>MARTIAL · GORYEO</span></div>
+          <div class="card-content"><p>MARTIAL · GORYEO</p><h3>무신 고려제일검</h3><div class="rule"></div><p class="description">고려를 배경으로 정파·사파·낭인이 충돌하는 가공의 무림. 대의와 생존, 드러낼 수 없는 마음이 한 자루 검 위에서 맞선다.</p><ul aria-label="무신 고려제일검 장르"><li>한국형 무협</li><li>다크 판타지</li><li>로맨스</li></ul></div><span class="card-arrow" aria-hidden="true">↗</span>
+        </article>
+        <article class="work-card steel">
+          <div class="card-no">02</div><div class="card-visual" aria-hidden="true"><div class="slash"></div><span>MILITARY · DYSTOPIA</span></div>
+          <div class="card-content"><p>MILITARY · DYSTOPIA</p><h3>FRONTIS 2042</h3><div class="rule"></div><p class="description">국가의 전쟁과 인외 재난을 함께 떠안은 민간군사기업. 살아남은 자들만이 다시 최전선으로 돌아가는 건조한 생존 기록.</p><ul aria-label="FRONTIS 2042 장르"><li>밀리터리</li><li>인외 재난</li><li>디스토피아</li></ul></div><span class="card-arrow" aria-hidden="true">↗</span>
+        </article>
+        <article class="work-card void">
+          <div class="card-no">03</div><div class="card-visual" aria-hidden="true"><div class="slash"></div><span>DARK · MYSTERY</span></div>
+          <div class="card-content"><p>DARK · MYSTERY</p><h3>受取人不明</h3><div class="rule"></div><p class="description">수취인 불명. 도착하지 못한 이름과 지워진 흔적을 다루는 어두운 미스터리 프로젝트.</p><ul aria-label="수취인 불명 장르"><li>미스터리</li><li>호러</li><li>비주얼 프로젝트</li></ul></div><span class="card-arrow" aria-hidden="true">↗</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="sound section-shell" id="sound">
+      <div class="sound-copy"><p class="eyebrow"><span></span> ORIGINAL SOUND</p><h2>장면이 끝난 뒤에도<br>남아 있는 소리.</h2><p>작품의 온도와 잔상을 담은 음원을 재생합니다.<br>현재 트랙은 플레이어 확인을 위한 사이트 데모입니다.</p></div>
+      <div class="audio-deck" id="audio-deck">
+        <div class="album-art" aria-hidden="true"><div class="orbital"><i></i><i></i><i></i></div><strong>B</strong></div>
+        <div class="track-panel">
+          <div class="track-topline"><span>NOW PLAYING</span><span>DEMO 01</span></div><h3>DARK ROOM</h3><p>BOM ARCHIVE · SITE DEMO</p>
+          <div class="waveform" id="waveform" aria-hidden="true"></div>
+          <div class="timeline-row"><span id="current-time">00:00</span><input id="timeline" aria-label="재생 위치" type="range" min="0" max="0" step="0.01" value="0"><span id="duration">00:00</span></div>
+          <div class="player-controls"><button type="button" id="restart" aria-label="처음으로">↶</button><button class="play-button" type="button" id="play" aria-label="재생">▶</button><div class="track-meta"><span>01</span><i></i><span>ONE TRACK</span></div></div>
+          <audio id="audio" src="dark-room-demo.mp3" preload="metadata"></audio>
+        </div>
+      </div>
+    </section>
+
+    <section class="about section-shell" id="about">
+      <div class="about-mark" aria-hidden="true">春</div>
+      <div class="about-copy"><p class="eyebrow"><span></span> ABOUT THE CREATOR</p><h2>BOM</h2><p class="lead">어둡고 거친 세계 속에서도 끝내 살아 움직이는 인물들을 만듭니다.</p><p class="body-copy">한국형 무협부터 밀리터리 디스토피아, 로맨스 판타지와 미스터리까지. 이야기의 분위기를 이미지와 타이포그래피, 음악으로 확장하는 창작자입니다.</p><div class="contact-row"><div><span>CONTACT</span><strong>연락처 연결 준비 중</strong></div><div><span>STATUS</span><strong>개인 작업 진행 중</strong></div></div></div>
+    </section>
+
+    <footer><a class="brand" href="#top"><span class="brand-mark"><i>B</i></span><span>BOM ARCHIVE</span></a><p>STORIES · SOUND · WORLDS</p><p>© 2026 BOM. ALL RIGHTS RESERVED.</p></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

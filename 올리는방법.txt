@@ -1,0 +1,20 @@
+봄의 GitHub Pages 업로드 파일입니다.
+
+중요: 압축을 푼 뒤, 안에 있는 파일 8개를 전부 GitHub에 올려야 합니다.
+ZIP 파일 자체를 GitHub에 올리면 사이트가 열리지 않습니다.
+
+올릴 파일:
+1. index.html
+2. style.css
+3. script.js
+4. hero.png
+5. og.png
+6. dark-room-demo.mp3
+7. favicon.svg
+8. 올리는방법.txt
+
+저장소 주소:
+https://github.com/dkdakduddl-ux/dkdakduddl-ux.github.io
+
+사이트가 게시되면 열리는 주소:
+https://dkdakduddl-ux.github.io
