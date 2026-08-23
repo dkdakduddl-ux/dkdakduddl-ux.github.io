@@ -27,6 +27,65 @@ const timeline = document.querySelector('#timeline');
 const currentTime = document.querySelector('#current-time');
 const duration = document.querySelector('#duration');
 const waveform = document.querySelector('#waveform');
+const trackSelector = document.querySelector('#track-selector');
+const trackTitle = document.querySelector('#track-title');
+const trackCredit = document.querySelector('#track-credit');
+const trackNumber = document.querySelector('#track-number');
+const trackPosition = document.querySelector('#track-position');
+
+const tracks = [
+  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', src: 'track-musinsa-a.mp3' },
+  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', src: 'track-musinsa-b.mp3' },
+  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', src: 'track-frontis-a.mp3' },
+  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', src: 'track-frontis-b.mp3' },
+  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', src: 'track-codeblack-a.mp3' },
+  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', src: 'track-codeblack-b.mp3' }
+];
+
+let activeTrackIndex = 0;
+
+function updateTrack(index, autoplay = false) {
+  const track = tracks[index];
+  if (!track || !audio) return;
+  activeTrackIndex = index;
+  audio.pause();
+  audio.src = track.src;
+  audio.load();
+  deck?.classList.remove('is-playing');
+  if (playButton) playButton.textContent = '▶';
+  if (currentTime) currentTime.textContent = '00:00';
+  if (duration) duration.textContent = '00:00';
+  if (timeline) {
+    timeline.value = '0';
+    timeline.style.setProperty('--progress', '0%');
+  }
+  if (trackTitle) trackTitle.textContent = `${track.title} · ${track.version}`;
+  if (trackCredit) trackCredit.textContent = `${track.work} · 땅콩마미`;
+  if (trackNumber) trackNumber.textContent = `TRACK ${String(index + 1).padStart(2, '0')}`;
+  if (trackPosition) trackPosition.textContent = `${String(index + 1).padStart(2, '0')} / ${String(tracks.length).padStart(2, '0')}`;
+  trackSelector?.querySelectorAll('button').forEach((button, buttonIndex) => {
+    button.classList.toggle('active', buttonIndex === index);
+    button.setAttribute('aria-pressed', buttonIndex === index ? 'true' : 'false');
+  });
+  if (autoplay) {
+    audio.play().then(() => {
+      deck?.classList.add('is-playing');
+      if (playButton) playButton.textContent = 'Ⅱ';
+    }).catch(() => {});
+  }
+}
+
+if (trackSelector) {
+  trackSelector.innerHTML = tracks.map((track, index) => `
+    <button type="button" class="track-option ${index === 0 ? 'active' : ''}" data-track="${index}" aria-pressed="${index === 0 ? 'true' : 'false'}">
+      <span>${track.work}</span><strong>${track.title}</strong><i>${track.version}</i>
+    </button>
+  `).join('');
+  trackSelector.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-track]');
+    if (button) updateTrack(Number(button.dataset.track), true);
+  });
+}
 
 function formatTime(value) {
   if (!Number.isFinite(value)) return '00:00';

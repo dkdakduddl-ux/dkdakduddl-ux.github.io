@@ -25,11 +25,11 @@ window.WORKS = [
   {
     id: 'recipient',
     title: '수취인 불명',
-    subtitle: 'DARK · MYSTERY · ADDRESS UNKNOWN',
+    subtitle: 'FIRST LOVE · LOSS · REUNION',
     cover: 'cover-recipient.webp',
     accent: '#1ca8c4',
-    summary: '수취인 불명. 도착하지 못한 이름과 지워진 흔적을 따라가는 백태하의 어두운 미스터리.',
-    tags: ['미스터리', '호러', '현대극'],
+    summary: '고등학교 시절 놓쳐 버린 첫사랑. 다른 절친과 결혼을 약속했지만 사고로 예비신부를 잃은 백태하가, 오래 멀어졌던 첫사랑과 다시 마주하며 시작되는 후회와 재회의 로맨스.',
+    tags: ['후회남', '첫사랑', '재회 로맨스'],
     links: [
       { platform: '둠칫', status: 'UNSAFE', url: 'https://doomchk.com/worlds/6439' },
       { platform: '크랙', status: 'UNSAFE', url: 'https://share.crack.wrtn.ai/87f64oc' }

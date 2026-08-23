@@ -1,4 +1,6 @@
 const params = new URLSearchParams(window.location.search);
+const assetVersion = '20260824-1';
+const assetSrc = (path) => `/${path}?v=${assetVersion}`;
 const requestedId = params.get('id');
 const works = Array.isArray(window.WORKS) ? window.WORKS : [];
 const workIndex = works.findIndex((item) => item.id === requestedId);
@@ -8,12 +10,12 @@ if (!work) {
   document.querySelector('#detail-main').innerHTML = '<section class="not-found"><h1>작품을 찾을 수 없습니다.</h1><a href="index.html">아카이브로 돌아가기</a></section>';
 } else {
   document.documentElement.style.setProperty('--work-accent', work.accent);
-  document.title = `${work.title} · BOM ARCHIVE`;
+  document.title = `${work.title} · 땅콩마미 ARCHIVE`;
 
   const cover = document.querySelector('#detail-cover');
-  cover.src = work.cover;
-  cover.alt = `${work.title} 움직이는 대표 이미지`;
-  document.querySelector('#detail-index').textContent = `ARCHIVE FILE ${String(workIndex + 1).padStart(2, '0')} / ${String(works.length).padStart(2, '0')}`;
+  cover.src = assetSrc(work.cover);
+  cover.alt = `${work.title} 대표 이미지`;
+  document.querySelector('#detail-index').textContent = `ARCHIVE FILE ${String(workIndex + 1).padStart(2, '0')}`;
   document.querySelector('#detail-subtitle').textContent = work.subtitle;
   document.querySelector('#detail-title').textContent = work.title;
   document.querySelector('#detail-summary').textContent = work.summary;
@@ -32,7 +34,7 @@ if (!work) {
   const documentGrid = document.querySelector('#document-grid');
   documentGrid.innerHTML = work.documents.map((document) => `
     <figure class="archive-document ${document.layout || ''}">
-      <img src="${document.src}" alt="${document.alt}" loading="lazy">
+      <img src="${assetSrc(document.src)}" alt="${document.alt}" loading="eager">
       <figcaption><span>${document.caption}</span><i>FILE · ${work.id.toUpperCase()}</i></figcaption>
     </figure>
   `).join('');
