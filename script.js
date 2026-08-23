@@ -2,7 +2,7 @@ const workGrid = document.querySelector('#work-grid');
 
 if (workGrid && Array.isArray(window.WORKS)) {
   workGrid.innerHTML = window.WORKS.map((work, index) => `
-    <a class="work-card ${index === 0 ? 'featured' : ''}" href="work.html?id=${encodeURIComponent(work.id)}" style="--card-accent:${work.accent}">
+    <a class="work-card" href="work.html?id=${encodeURIComponent(work.id)}" style="--card-accent:${work.accent}">
       <div class="card-cover">
         <img src="${work.cover}" alt="${work.title} 대표 이미지" ${index > 1 ? 'loading="lazy"' : ''}>
         <span class="card-no">${String(index + 1).padStart(2, '0')}</span>
