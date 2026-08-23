@@ -35,12 +35,12 @@ const trackPosition = document.querySelector('#track-position');
 const soundHeading = document.querySelector('#sound-heading');
 
 const tracks = [
-  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_A', src: 'track-musinsa-a.mp3' },
-  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_B', src: 'track-musinsa-b.mp3' },
-  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_A', src: 'track-frontis-a.mp3' },
-  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_B', src: 'track-frontis-b.mp3' },
-  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', heading: 'CODE BLACK OST_A', src: 'track-codeblack-a.mp3' },
-  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.mp3' }
+  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_A', src: 'track-musinsa-a.MP3' },
+  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_B', src: 'track-musinsa-b.MP3' },
+  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_A', src: 'track-frontis-a.MP3' },
+  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_B', src: 'track-frontis-b.MP3' },
+  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', heading: 'CODE BLACK OST_A', src: 'track-codeblack-a.MP3' },
+  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.MP3' }
 ];
 
 let activeTrackIndex = 0;
