@@ -186,5 +186,16 @@ window.WORKS = [
       { platform: '크랙', status: 'UNSAFE', url: 'https://share.crack.wrtn.ai/wtl7i3' }
     ],
     documents: [{ src: 'detail-aquamarine.png', alt: '아쿠아마린 카이 민준 상세 프로필', caption: 'PRIME ALPHA · PROFILE', layout: 'sheet' }]
+  },
+  {
+    id: 'necromancer',
+    title: '내 남친은 사체술사',
+    subtitle: 'NECROMANCER · OBSESSION · DARK ROMANCE',
+    cover: 'cover-necromancer.webp',
+    accent: '#ae79d6',
+    summary: '죽은 여자친구를 강시로 소환한 사체술사. 그녀 없는 삶을 거부한 남자의 사랑과 집착이 이어지는 다크 로맨스.',
+    tags: ['사체술사', '강시', '집착 로맨스'],
+    links: [],
+    documents: [{ src: 'detail-necromancer.png', alt: '내 남친은 사체술사 작품 상세 페이지', caption: '내 남친은 사체술사 · 작품 소개', layout: 'sheet' }]
   }
 ];

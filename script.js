@@ -40,10 +40,18 @@ const tracks = [
   { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_A', src: 'track-frontis-a.MP3' },
   { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_B', src: 'track-frontis-b.MP3' },
   { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', heading: 'CODE BLACK OST_A', src: 'track-codeblack-a.MP3' },
-  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.MP3' }
+  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.MP3' },
+  { title: '내 남친은 사체술사', version: 'A', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_A', src: 'track-necromancer-1-a.MP3' },
+  { title: '내 남친은 사체술사', version: 'B', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_B', src: 'track-necromancer-1-b.MP3' },
+  { title: '남친이 죽은 나를 사랑한다', version: 'A', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_A', src: 'track-necromancer-2-a.MP3' },
+  { title: '남친이 죽은 나를 사랑한다', version: 'B', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_B', src: 'track-necromancer-2-b.MP3' }
 ];
 
 let activeTrackIndex = 0;
+
+if (trackPosition) {
+  trackPosition.textContent = `01 / ${String(tracks.length).padStart(2, '0')}`;
+}
 
 function updateTrack(index, autoplay = false) {
   const track = tracks[index];
