@@ -47,61 +47,295 @@ const tracks = [
   { title: '남친이 죽은 나를 사랑한다', version: 'B', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_B', src: 'track-necromancer-2-b.MP3' }
 ];
 
-let activeTrackIndex = 0;
+const previousButton = document.querySelector('#previous-track');
+const nextButton = document.querySelector('#next-track');
+const shuffleButton = document.querySelector('#shuffle');
+const repeatButton = document.querySelector('#repeat');
+const allButton = document.querySelector('#all-tracks');
+const savedButton = document.querySelector('#saved-tracks');
+const allCount = document.querySelector('#all-count');
+const savedCount = document.querySelector('#saved-count');
+const playlistEmpty = document.querySelector('#playlist-empty');
+const playlistNote = document.querySelector('#playlist-note');
+const playerStatus = document.querySelector('#player-status');
+const storageKey = 'peanutmami-archive-player-v1';
+const indexBySource = new Map(tracks.map((track, index) => [track.src, index]));
+let storageUnavailable = false;
 
-if (trackPosition) {
-  trackPosition.textContent = `01 / ${String(tracks.length).padStart(2, '0')}`;
+function readPreferences() {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  } catch (error) {
+    storageUnavailable = error.name !== 'SyntaxError';
+    return {};
+  }
 }
 
-function updateTrack(index, autoplay = false) {
-  const track = tracks[index];
-  if (!track || !audio) return;
-  activeTrackIndex = index;
-  audio.pause();
-  audio.src = track.src;
-  audio.load();
-  deck?.classList.remove('is-playing');
-  if (playButton) playButton.textContent = '▶';
+const preferences = readPreferences();
+let savedSources = Array.isArray(preferences.saved)
+  ? [...new Set(preferences.saved.filter((src) => indexBySource.has(src)))] : [];
+let playlistView = preferences.view === 'saved' ? 'saved' : 'all';
+let shuffleEnabled = preferences.shuffle === true;
+let repeatMode = ['off', 'all', 'one'].includes(preferences.repeat) ? preferences.repeat : 'off';
+let activeTrackIndex = -1;
+let playOrder = [];
+let queueCursor = -1;
+let queueCompleted = false;
+let playbackToken = 0;
+
+function updateStorageNote() {
+  if (!playlistNote) return;
+  playlistNote.textContent = storageUnavailable
+    ? '이 브라우저에서는 목록을 저장할 수 없어요. 담은 곡은 이번 방문에서만 유지됩니다.'
+    : '선택한 목록을 이어서 재생해요. 내 재생목록은 이 브라우저에만 저장되며, 다른 기기와 동기화되지 않아요.';
+}
+
+function persistPreferences() {
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify({
+      saved: savedSources, view: playlistView, shuffle: shuffleEnabled, repeat: repeatMode
+    }));
+    storageUnavailable = false;
+  } catch {
+    storageUnavailable = true;
+  }
+  updateStorageNote();
+}
+
+function visibleTrackIndices() {
+  return playlistView === 'saved'
+    ? savedSources.map((src) => indexBySource.get(src))
+    : tracks.map((_, index) => index);
+}
+
+function shuffled(indices) {
+  const result = [...indices];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function setStatus(message = '') {
+  if (playerStatus) playerStatus.textContent = message;
+}
+
+function formatTime(value) {
+  if (!Number.isFinite(value) || value < 0) return '00:00';
+  return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(Math.floor(value % 60)).padStart(2, '0')}`;
+}
+
+function escapeText(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[character]);
+}
+
+function syncPlaybackState() {
+  const playing = activeTrackIndex >= 0 && audio && !audio.paused && !audio.ended;
+  deck?.classList.toggle('is-playing', Boolean(playing));
+  if (playButton) {
+    playButton.textContent = playing ? 'Ⅱ' : '▶';
+    playButton.setAttribute('aria-label', playing ? '일시정지' : '재생');
+  }
+}
+
+function renderControls() {
+  const empty = playOrder.length === 0;
+  if (playButton) playButton.disabled = empty;
+  if (restartButton) restartButton.disabled = empty;
+  if (previousButton) previousButton.disabled = empty || (queueCursor <= 0 && repeatMode !== 'all');
+  if (nextButton) nextButton.disabled = empty || (queueCursor >= playOrder.length - 1 && repeatMode !== 'all');
+  if (trackPosition) trackPosition.textContent = `${String(empty ? 0 : queueCursor + 1).padStart(2, '0')} / ${String(playOrder.length).padStart(2, '0')}`;
+  if (shuffleButton) {
+    shuffleButton.textContent = shuffleEnabled ? '랜덤 켜짐' : '랜덤 꺼짐';
+    shuffleButton.setAttribute('aria-pressed', String(shuffleEnabled));
+  }
+  if (repeatButton) {
+    const labels = { off: '반복 끔', all: '전체 반복', one: '한 곡 반복' };
+    const nextModes = { off: 'all', all: 'one', one: 'off' };
+    repeatButton.textContent = labels[repeatMode];
+    repeatButton.dataset.mode = repeatMode;
+    repeatButton.setAttribute('aria-label', `${labels[repeatMode]}. 누르면 ${labels[nextModes[repeatMode]]}`);
+  }
+  syncPlaybackState();
+}
+
+function renderSelection() {
+  trackSelector?.querySelectorAll('[data-track]').forEach((button) => {
+    const selected = Number(button.dataset.track) === activeTrackIndex;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+  renderControls();
+}
+
+function renderPlaylist() {
+  if (!trackSelector) return;
+  const indices = visibleTrackIndices();
+  const focused = document.activeElement?.closest?.('[data-save], [data-track]');
+  const focusKind = focused?.hasAttribute('data-save') ? 'save' : 'track';
+  const focusIndex = focused ? Number(focused.dataset[focusKind]) : -1;
+  const previousIndices = [...trackSelector.querySelectorAll('[data-track]')].map((button) => Number(button.dataset.track));
+  trackSelector.innerHTML = indices.map((index) => {
+    const track = tracks[index];
+    const saved = savedSources.includes(track.src);
+    const label = escapeText(`${track.title} ${track.version}`);
+    return `<div class="track-row">
+      <button type="button" class="track-option" data-track="${index}" aria-pressed="false" aria-label="${label} 재생">
+        <span>${escapeText(track.work)}</span><strong>${escapeText(track.title)}</strong><i>${escapeText(track.version)}</i>
+      </button>
+      <button type="button" class="save-track" data-save="${index}" aria-pressed="${saved}" aria-label="${label} · ${saved ? '내 재생목록에서 빼기' : '내 재생목록에 담기'}" title="${saved ? '내 재생목록에서 빼기' : '내 재생목록에 담기'}">${saved ? '♥' : '♡'}</button>
+    </div>`;
+  }).join('');
+  if (allCount) allCount.textContent = String(tracks.length);
+  if (savedCount) savedCount.textContent = String(savedSources.length);
+  allButton?.setAttribute('aria-pressed', String(playlistView === 'all'));
+  savedButton?.setAttribute('aria-pressed', String(playlistView === 'saved'));
+  if (playlistEmpty) playlistEmpty.hidden = indices.length > 0;
+  trackSelector.setAttribute('aria-label', playlistView === 'saved' ? '내 재생목록' : '전체 음원');
+  renderSelection();
+  if (focused) {
+    const fallback = indices[Math.min(Math.max(previousIndices.indexOf(focusIndex), 0), indices.length - 1)];
+    const target = trackSelector.querySelector(`[data-${focusKind}="${focusIndex}"]`)
+      || trackSelector.querySelector(`[data-${focusKind}="${fallback}"]`) || allButton;
+    target?.focus({ preventScroll: true });
+  }
+}
+
+function resetTimeline() {
   if (currentTime) currentTime.textContent = '00:00';
   if (duration) duration.textContent = '00:00';
   if (timeline) {
     timeline.value = '0';
+    timeline.max = '0';
+    timeline.disabled = true;
     timeline.style.setProperty('--progress', '0%');
   }
-  if (trackTitle) trackTitle.textContent = `${track.title} · ${track.version}`;
-  if (trackCredit) trackCredit.textContent = `${track.work} · 땅콩마미`;
-  if (soundHeading) soundHeading.textContent = track.heading;
-  if (trackNumber) trackNumber.textContent = `TRACK ${String(index + 1).padStart(2, '0')}`;
-  if (trackPosition) trackPosition.textContent = `${String(index + 1).padStart(2, '0')} / ${String(tracks.length).padStart(2, '0')}`;
-  trackSelector?.querySelectorAll('button').forEach((button, buttonIndex) => {
-    button.classList.toggle('active', buttonIndex === index);
-    button.setAttribute('aria-pressed', buttonIndex === index ? 'true' : 'false');
-  });
-  if (autoplay) {
-    audio.play().then(() => {
-      deck?.classList.add('is-playing');
-      if (playButton) playButton.textContent = 'Ⅱ';
-    }).catch(() => {});
+}
+
+async function startPlayback() {
+  if (!audio || activeTrackIndex < 0) return;
+  const request = ++playbackToken;
+  setStatus();
+  try {
+    await audio.play();
+    if (request === playbackToken) syncPlaybackState();
+  } catch (error) {
+    if (request !== playbackToken || error.name === 'AbortError') return;
+    syncPlaybackState();
+    setStatus(error.name === 'NotAllowedError'
+      ? '재생 버튼을 눌러 음악을 시작해 주세요.'
+      : '음원을 재생하지 못했어요. 다시 시도하거나 다음 곡을 선택해 주세요.');
   }
 }
 
-if (trackSelector) {
-  trackSelector.innerHTML = tracks.map((track, index) => `
-    <button type="button" class="track-option ${index === 0 ? 'active' : ''}" data-track="${index}" aria-pressed="${index === 0 ? 'true' : 'false'}">
-      <span>${track.work}</span><strong>${track.title}</strong><i>${track.version}</i>
-    </button>
-  `).join('');
-  trackSelector.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-track]');
-    if (button) updateTrack(Number(button.dataset.track), true);
-  });
+function loadTrack(index, autoplay = false) {
+  if (!audio) return;
+  playbackToken += 1;
+  audio.pause();
+  activeTrackIndex = index;
+  queueCompleted = false;
+  resetTimeline();
+  setStatus();
+  const track = tracks[index];
+  if (track) {
+    audio.src = track.src;
+    if (trackTitle) trackTitle.textContent = `${track.title} · ${track.version}`;
+    if (trackCredit) trackCredit.textContent = `${track.work} · 땅콩마미`;
+    if (soundHeading) soundHeading.textContent = track.heading;
+    if (trackNumber) trackNumber.textContent = `TRACK ${String(index + 1).padStart(2, '0')}`;
+  } else {
+    audio.removeAttribute('src');
+    if (trackTitle) trackTitle.textContent = '담은 곡이 없어요';
+    if (trackCredit) trackCredit.textContent = '전체 음원에서 ♡를 눌러 곡을 담아주세요.';
+    if (soundHeading) soundHeading.textContent = '내 재생목록';
+    if (trackNumber) trackNumber.textContent = 'TRACK —';
+  }
+  audio.load();
+  renderSelection();
+  if (autoplay && track) void startPlayback();
 }
 
-function formatTime(value) {
-  if (!Number.isFinite(value)) return '00:00';
-  const minutes = Math.floor(value / 60);
-  const seconds = Math.floor(value % 60);
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+function rebuildQueue(preferredIndex = activeTrackIndex, autoplay = false) {
+  const indices = visibleTrackIndices();
+  const keepTrack = indices.includes(preferredIndex);
+  playOrder = shuffleEnabled
+    ? (keepTrack ? [preferredIndex, ...shuffled(indices.filter((index) => index !== preferredIndex))] : shuffled(indices))
+    : [...indices];
+  queueCursor = indices.length ? (keepTrack ? playOrder.indexOf(preferredIndex) : 0) : -1;
+  queueCompleted = false;
+  const nextIndex = playOrder[queueCursor] ?? -1;
+  if (nextIndex !== activeTrackIndex || !indices.length) loadTrack(nextIndex, autoplay);
+  else renderSelection();
+}
+
+function startNewCycle(autoplay = true) {
+  const indices = visibleTrackIndices();
+  if (!indices.length) return;
+  playOrder = shuffleEnabled ? shuffled(indices) : [...indices];
+  if (shuffleEnabled && playOrder.length > 1 && playOrder[0] === activeTrackIndex) {
+    [playOrder[0], playOrder[1]] = [playOrder[1], playOrder[0]];
+  }
+  queueCursor = 0;
+  loadTrack(playOrder[queueCursor], autoplay);
+}
+
+function advanceTrack(direction, autoplay = true) {
+  if (!playOrder.length) return;
+  const nextCursor = queueCursor + direction;
+  if (nextCursor >= playOrder.length) {
+    if (repeatMode === 'all') startNewCycle(autoplay);
+    else {
+      queueCompleted = true;
+      playbackToken += 1;
+      audio.pause();
+      renderControls();
+      setStatus('목록의 마지막 곡까지 재생했어요.');
+    }
+    return;
+  }
+  if (nextCursor < 0 && repeatMode !== 'all') return;
+  queueCursor = nextCursor < 0 ? playOrder.length - 1 : nextCursor;
+  loadTrack(playOrder[queueCursor], autoplay);
+}
+
+function selectTrack(index) {
+  const indices = visibleTrackIndices();
+  if (!indices.includes(index)) return;
+  playOrder = shuffleEnabled ? [index, ...shuffled(indices.filter((item) => item !== index))] : [...indices];
+  queueCursor = playOrder.indexOf(index);
+  loadTrack(index, true);
+}
+
+function changePlaylist(view) {
+  if (playlistView === view) return;
+  const wasPlaying = audio && !audio.paused && !audio.ended;
+  playlistView = view;
+  rebuildQueue(activeTrackIndex, wasPlaying);
+  renderPlaylist();
+  persistPreferences();
+}
+
+function toggleSavedTrack(index) {
+  const track = tracks[index];
+  if (!track) return;
+  const previousIndices = visibleTrackIndices();
+  const previousPosition = previousIndices.indexOf(activeTrackIndex);
+  const wasPlaying = audio && !audio.paused && !audio.ended;
+  const wasSaved = savedSources.includes(track.src);
+  savedSources = wasSaved ? savedSources.filter((src) => src !== track.src) : [...savedSources, track.src];
+  if (playlistView === 'saved') {
+    const indices = visibleTrackIndices();
+    const preferred = indices.includes(activeTrackIndex) ? activeTrackIndex
+      : indices[Math.min(Math.max(previousPosition, 0), indices.length - 1)];
+    rebuildQueue(preferred, wasPlaying);
+  }
+  renderPlaylist();
+  persistPreferences();
+  setStatus(wasSaved ? '내 재생목록에서 뺐어요.' : '내 재생목록에 담았어요.');
 }
 
 if (waveform) {
@@ -112,39 +346,92 @@ if (waveform) {
   }
 }
 
-if (audio && deck && playButton && restartButton && timeline && currentTime && duration) {
-  audio.addEventListener('loadedmetadata', () => {
-    timeline.max = String(audio.duration);
-    duration.textContent = formatTime(audio.duration);
-  });
-
-  audio.addEventListener('timeupdate', () => {
-    timeline.value = String(audio.currentTime);
-    currentTime.textContent = formatTime(audio.currentTime);
-    const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-    timeline.style.setProperty('--progress', `${progress}%`);
-  });
-
-  audio.addEventListener('ended', () => {
-    deck.classList.remove('is-playing');
-    playButton.textContent = '▶';
-    playButton.setAttribute('aria-label', '재생');
-  });
-
-  playButton.addEventListener('click', async () => {
-    if (audio.paused) {
-      await audio.play();
-      deck.classList.add('is-playing');
-      playButton.textContent = 'Ⅱ';
-      playButton.setAttribute('aria-label', '일시정지');
-    } else {
-      audio.pause();
-      deck.classList.remove('is-playing');
-      playButton.textContent = '▶';
-      playButton.setAttribute('aria-label', '재생');
+if (audio && deck && playButton && trackSelector) {
+  audio.loop = false;
+  trackSelector.addEventListener('click', (event) => {
+    const save = event.target.closest('[data-save]');
+    if (save) toggleSavedTrack(Number(save.dataset.save));
+    else {
+      const button = event.target.closest('[data-track]');
+      if (button) selectTrack(Number(button.dataset.track));
     }
   });
-
-  restartButton.addEventListener('click', () => { audio.currentTime = 0; });
-  timeline.addEventListener('input', () => { audio.currentTime = Number(timeline.value); });
+  allButton?.addEventListener('click', () => changePlaylist('all'));
+  savedButton?.addEventListener('click', () => changePlaylist('saved'));
+  shuffleButton?.addEventListener('click', () => {
+    shuffleEnabled = !shuffleEnabled;
+    rebuildQueue();
+    persistPreferences();
+  });
+  repeatButton?.addEventListener('click', () => {
+    repeatMode = { off: 'all', all: 'one', one: 'off' }[repeatMode];
+    renderControls();
+    persistPreferences();
+  });
+  previousButton?.addEventListener('click', () => advanceTrack(-1, !audio.paused));
+  nextButton?.addEventListener('click', () => advanceTrack(1, !audio.paused));
+  playButton.addEventListener('click', () => {
+    if (audio.paused || audio.ended) {
+      if (queueCompleted) startNewCycle();
+      else {
+        if (audio.ended) audio.currentTime = 0;
+        void startPlayback();
+      }
+    } else {
+      playbackToken += 1;
+      audio.pause();
+    }
+  });
+  restartButton?.addEventListener('click', () => {
+    if (activeTrackIndex < 0) return;
+    audio.currentTime = 0;
+    queueCompleted = false;
+    setStatus();
+  });
+  timeline?.addEventListener('input', () => {
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      audio.currentTime = Math.min(audio.duration, Math.max(0, Number(timeline.value)));
+    }
+  });
+  function updateDuration() {
+    const length = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+    if (timeline) {
+      timeline.max = String(length);
+      timeline.disabled = !length;
+    }
+    if (duration) duration.textContent = formatTime(length);
+  }
+  audio.addEventListener('loadedmetadata', updateDuration);
+  audio.addEventListener('durationchange', updateDuration);
+  audio.addEventListener('timeupdate', () => {
+    if (currentTime) currentTime.textContent = formatTime(audio.currentTime);
+    if (timeline) {
+      timeline.value = String(audio.currentTime || 0);
+      const progress = Number.isFinite(audio.duration) && audio.duration > 0 ? (audio.currentTime / audio.duration) * 100 : 0;
+      timeline.style.setProperty('--progress', `${Math.min(100, Math.max(0, progress))}%`);
+    }
+  });
+  audio.addEventListener('play', syncPlaybackState);
+  audio.addEventListener('pause', syncPlaybackState);
+  audio.addEventListener('playing', () => { syncPlaybackState(); setStatus(); });
+  audio.addEventListener('waiting', () => {
+    if (!audio.paused) setStatus('음원을 불러오는 중이에요…');
+  });
+  audio.addEventListener('ended', () => {
+    if (activeTrackIndex < 0) return;
+    if (repeatMode === 'one') {
+      audio.currentTime = 0;
+      void startPlayback();
+    } else advanceTrack(1, true);
+  });
+  audio.addEventListener('error', () => {
+    if (activeTrackIndex < 0 || !audio.error) return;
+    playbackToken += 1;
+    audio.pause();
+    syncPlaybackState();
+    setStatus('음원을 불러오지 못했어요. 다음 곡을 선택하거나 음원 파일을 확인해 주세요.');
+  });
+  renderPlaylist();
+  rebuildQueue();
+  updateStorageNote();
 }

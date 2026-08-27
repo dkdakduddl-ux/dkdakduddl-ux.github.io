@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://dkdakduddl-ux.github.io/">
   <meta property="og:image" content="https://dkdakduddl-ux.github.io/og.png">
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="style.css?v=20260824-2">
+  <link rel="stylesheet" href="style.css?v=20260827-playlist-1">
 </head>
 <body>
   <main>
@@ -42,15 +42,32 @@
     </section>
 
     <section class="sound section-shell" id="sound">
-      <div class="sound-copy"><p class="eyebrow"><span></span> ORIGINAL SOUND</p><h2 id="sound-heading">무신 고려 제일검객들 OST_A</h2><p>작품의 온도와 잔상을 담은 음원을 재생합니다.<br>곡을 선택하면 해당 작품의 OST 표시가 바뀝니다.</p></div>
+      <div class="sound-copy"><p class="eyebrow"><span></span> ORIGINAL SOUND</p><h2 id="sound-heading">무신 고려 제일검객들 OST_A</h2><p>작품의 온도와 잔상을 담은 음원을 이어 듣습니다.<br>좋아하는 곡은 ♡를 눌러 내 재생목록에 담아보세요.</p></div>
       <div class="audio-deck" id="audio-deck">
         <div class="album-art" aria-hidden="true"><div class="orbital"><i></i><i></i><i></i></div><strong>P</strong></div>
         <div class="track-panel">
           <div class="track-topline"><span>NOW PLAYING</span><span id="track-number">TRACK 01</span></div><h3 id="track-title">내 검이 너에게 닿기까지 · A</h3><p id="track-credit">무신 고려 제일검객들 · 땅콩마미</p>
           <div class="waveform" id="waveform" aria-hidden="true"></div>
           <div class="timeline-row"><span id="current-time">00:00</span><input id="timeline" aria-label="재생 위치" type="range" min="0" max="0" step="0.01" value="0"><span id="duration">00:00</span></div>
-          <div class="player-controls"><button type="button" id="restart" aria-label="처음으로">↶</button><button class="play-button" type="button" id="play" aria-label="재생">▶</button><div class="track-meta"><span id="track-position">01 / 10</span><i></i><span>PLAYLIST</span></div></div>
-          <div class="track-selector" id="track-selector" aria-label="음원 목록"></div>
+          <div class="player-controls">
+            <button type="button" id="previous-track" aria-label="이전 곡" title="이전 곡">이전</button>
+            <button class="play-button" type="button" id="play" aria-label="재생">▶</button>
+            <button type="button" id="next-track" aria-label="다음 곡" title="다음 곡">다음</button>
+            <button type="button" id="restart" aria-label="현재 곡 처음부터" title="현재 곡 처음부터">↶</button>
+            <div class="track-meta"><span id="track-position">01 / 10</span></div>
+          </div>
+          <div class="playback-modes" aria-label="재생 방식">
+            <button type="button" id="shuffle" aria-pressed="false">랜덤 꺼짐</button>
+            <button type="button" id="repeat" data-mode="off" aria-label="반복 끔. 누르면 전체 반복">반복 끔</button>
+          </div>
+          <p class="player-status" id="player-status" role="status" aria-live="polite" aria-atomic="true"></p>
+          <div class="playlist-tabs" role="group" aria-label="재생할 목록 선택">
+            <button type="button" id="all-tracks" aria-pressed="true" aria-controls="track-selector">전체 음원 <span id="all-count">10</span></button>
+            <button type="button" id="saved-tracks" aria-pressed="false" aria-controls="track-selector">내 재생목록 <span id="saved-count">0</span></button>
+          </div>
+          <p class="playlist-empty" id="playlist-empty" hidden>아직 담은 곡이 없어요.<br>전체 음원에서 곡 옆의 ♡를 눌러주세요.</p>
+          <div class="track-selector" id="track-selector" aria-label="전체 음원"></div>
+          <p class="playlist-note" id="playlist-note">선택한 목록을 이어서 재생해요. 내 재생목록은 이 브라우저에만 저장되며, 다른 기기와 동기화되지 않아요.</p>
           <audio id="audio" src="track-musinsa-a.MP3" preload="metadata"></audio>
         </div>
       </div>
@@ -64,6 +81,6 @@
     <footer><a class="brand" href="#top"><span class="brand-mark"><i>땅</i></span><span>땅콩마미 ARCHIVE</span></a><p>STORIES · SOUND · WORLDS</p><p>© 2026 땅콩마미. ALL RIGHTS RESERVED.</p></footer>
   </main>
   <script src="works.js?v=20260827-necromancer-2"></script>
-  <script src="script.js?v=20260827-necromancer-1"></script>
+  <script src="script.js?v=20260827-playlist-1"></script>
 </body>
 </html>

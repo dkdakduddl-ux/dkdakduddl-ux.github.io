@@ -98,6 +98,54 @@ button,input { font:inherit; }
 .track-option strong { overflow:hidden; font-size:10px; text-overflow:ellipsis; white-space:nowrap; }
 .track-option i { position:absolute; top:50%; right:11px; transform:translateY(-50%); color:var(--red-hot); font:700 10px/1 monospace; font-style:normal; }
 
+/* Playlist controls: styles remain scoped to the existing sound section. */
+.sound { grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr); gap:clamp(28px,5vw,80px); }
+.sound .audio-deck { min-width:0; grid-template-columns:minmax(110px,.3fr) minmax(0,1fr); }
+.sound .album-art { min-width:0; }
+.sound .track-panel { min-width:0; padding:30px 26px 24px; }
+.sound .track-panel h3 { margin-top:30px; font-size:clamp(26px,2.8vw,40px); line-height:1.3; overflow-wrap:anywhere; word-break:keep-all; }
+.sound .track-panel>p { line-height:1.65; letter-spacing:0; }
+.sound .player-controls { gap:8px; padding-top:20px; margin-top:0; }
+.sound .player-controls button { flex-shrink:0; width:44px; height:44px; font-size:12px; }
+.sound .player-controls .play-button { width:52px; height:52px; font-size:17px; }
+.sound .track-meta { min-width:0; color:#aaa59d; font-size:11px; white-space:nowrap; }
+.sound .playback-modes { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.sound .playback-modes button { min-height:40px; padding:8px 14px; border:1px solid #393530; background:#131110; color:#ada69b; font-size:12px; cursor:pointer; }
+.sound .playback-modes button[aria-pressed="true"],.sound .playback-modes button[data-mode="all"],.sound .playback-modes button[data-mode="one"] { border-color:var(--red-hot); color:var(--paper); background:rgba(182,23,34,.18); }
+.sound .track-panel>.player-status { min-height:1.65em; margin:9px 0 14px; color:#e7b5aa; font-size:12px; line-height:1.65; }
+.sound .playlist-tabs { display:grid; grid-template-columns:1fr 1fr; gap:8px; border-top:1px solid #302b28; padding-top:18px; }
+.sound .playlist-tabs button { min-width:0; min-height:44px; padding:10px 6px; border:1px solid #36312c; background:#0a0a0a; color:#aaa195; font-size:12px; cursor:pointer; }
+.sound .playlist-tabs button[aria-pressed="true"] { border-color:var(--red); background:rgba(182,23,34,.12); color:var(--paper); }
+.sound .playlist-tabs span { margin-left:5px; color:inherit; font-size:10px; font-variant-numeric:tabular-nums; }
+.sound .track-selector { display:flex; flex-direction:column; max-height:366px; margin-top:12px; padding:0 4px 0 0; gap:8px; overflow-y:auto; overscroll-behavior:contain; border-top:0; scrollbar-width:thin; scrollbar-color:#67524a #141110; }
+.sound .track-row { display:grid; flex:0 0 auto; grid-template-columns:minmax(0,1fr) 44px; gap:6px; align-items:center; }
+.sound .track-option { min-height:68px; height:100%; padding:11px 32px 11px 12px; }
+.sound .track-option span { font-size:9px; line-height:1.5; letter-spacing:.02em; }
+.sound .track-option strong { font-size:12px; line-height:1.5; font-weight:600; white-space:normal; overflow-wrap:anywhere; word-break:keep-all; }
+.sound .track-option i { font-size:12px; }
+.sound .save-track { display:grid; place-items:center; width:44px; height:44px; padding:0; border:1px solid #39312e; background:#0c0a09; color:#aba197; font-size:25px; cursor:pointer; }
+.sound .save-track[aria-pressed="true"] { border-color:#8f2830; color:#f45060; background:rgba(182,23,34,.13); }
+.sound .track-panel>.playlist-empty { margin:22px 0 12px; color:#b9aea0; font-size:12px; line-height:1.9; }
+.sound .track-panel>.playlist-note { margin:16px 0 0; color:#938a80; font-size:10px; line-height:1.9; }
+.sound button:disabled { opacity:.35; cursor:not-allowed; }
+.sound button:focus-visible,.sound input:focus-visible { outline:2px solid #f8d39c; outline-offset:3px; }
+.sound .track-option:focus-visible { outline-offset:-3px; }
+
+@media (max-width:980px) {
+  .sound .audio-deck { grid-template-columns:minmax(140px,.35fr) minmax(0,1fr); }
+}
+@media (max-width:680px) {
+  .sound .audio-deck { grid-template-columns:1fr; }
+  .sound .album-art { min-height:180px; }
+  .sound .track-panel { padding:24px 18px; }
+  .sound .track-panel h3 { margin-top:24px; font-size:30px; }
+}
+@media (max-width:360px) {
+  .sound .player-controls { gap:5px; }
+  .sound .player-controls button { width:38px; }
+  .sound .player-controls .play-button { width:46px; }
+}
+
 .about { display:grid; grid-template-columns:.8fr 1.2fr; align-items:center; gap:9vw; min-height:680px; border-top:1px solid #191919; }
 .about-mark { min-height:420px; position:relative; display:grid; place-items:center; font-family:"Batang",serif; font-size:clamp(150px,23vw,360px); line-height:1; color:#111; text-shadow:-1px 0 #342325,0 0 90px rgba(182,23,34,.12); }
 .about-mark::after { content:"땅콩마미 / CREATOR"; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-90deg); color:var(--red-hot); font:9px/1 monospace; letter-spacing:.3em; white-space:nowrap; }
