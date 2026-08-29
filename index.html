@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://dkdakduddl-ux.github.io/">
   <meta property="og:image" content="https://dkdakduddl-ux.github.io/og.png">
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="style.css?v=20260827-playlist-1">
+  <link rel="stylesheet" href="style.css?v=20260829-volume-1">
 </head>
 <body>
   <main>
@@ -60,6 +60,12 @@
             <button type="button" id="shuffle" aria-pressed="false">랜덤 꺼짐</button>
             <button type="button" id="repeat" data-mode="off" aria-label="반복 끔. 누르면 전체 반복">반복 끔</button>
           </div>
+          <div class="volume-control">
+            <button type="button" id="mute" aria-pressed="false">음소거</button>
+            <label for="volume">음량</label>
+            <input id="volume" type="range" min="0" max="100" step="1" value="80" aria-valuetext="80%">
+            <output id="volume-value" for="volume">80%</output>
+          </div>
           <p class="player-status" id="player-status" role="status" aria-live="polite" aria-atomic="true"></p>
           <div class="playlist-tabs" role="group" aria-label="재생할 목록 선택">
             <button type="button" id="all-tracks" aria-pressed="true" aria-controls="track-selector">전체 음원 <span id="all-count">14</span></button>
@@ -81,6 +87,6 @@
     <footer><a class="brand" href="#top"><span class="brand-mark"><i>땅</i></span><span>땅콩마미 ARCHIVE</span></a><p>STORIES · SOUND · WORLDS</p><p>© 2026 땅콩마미. ALL RIGHTS RESERVED.</p></footer>
   </main>
   <script src="works.js?v=20260827-necromancer-2"></script>
-  <script src="script.js?v=20260828-recipient-1"></script>
+  <script src="script.js?v=20260829-volume-1"></script>
 </body>
 </html>

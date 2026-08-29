@@ -62,6 +62,9 @@ const savedCount = document.querySelector('#saved-count');
 const playlistEmpty = document.querySelector('#playlist-empty');
 const playlistNote = document.querySelector('#playlist-note');
 const playerStatus = document.querySelector('#player-status');
+const muteButton = document.querySelector('#mute');
+const volumeSlider = document.querySelector('#volume');
+const volumeValue = document.querySelector('#volume-value');
 const storageKey = 'peanutmami-archive-player-v1';
 const indexBySource = new Map(tracks.map((track, index) => [track.src, index]));
 let storageUnavailable = false;
@@ -82,6 +85,11 @@ let savedSources = Array.isArray(preferences.saved)
 let playlistView = preferences.view === 'saved' ? 'saved' : 'all';
 let shuffleEnabled = preferences.shuffle === true;
 let repeatMode = ['off', 'all', 'one'].includes(preferences.repeat) ? preferences.repeat : 'off';
+const storedVolume = typeof preferences.volume === 'number' && Number.isFinite(preferences.volume)
+  ? preferences.volume : 0.8;
+let volumeLevel = Math.min(1, Math.max(0, storedVolume));
+let muted = preferences.muted === true;
+let lastAudibleVolume = volumeLevel > 0 ? volumeLevel : 0.8;
 let activeTrackIndex = -1;
 let playOrder = [];
 let queueCursor = -1;
@@ -98,7 +106,12 @@ function updateStorageNote() {
 function persistPreferences() {
   try {
     window.localStorage.setItem(storageKey, JSON.stringify({
-      saved: savedSources, view: playlistView, shuffle: shuffleEnabled, repeat: repeatMode
+      saved: savedSources,
+      view: playlistView,
+      shuffle: shuffleEnabled,
+      repeat: repeatMode,
+      volume: volumeLevel,
+      muted
     }));
     storageUnavailable = false;
   } catch {
@@ -124,6 +137,25 @@ function shuffled(indices) {
 
 function setStatus(message = '') {
   if (playerStatus) playerStatus.textContent = message;
+}
+
+function renderVolume() {
+  const percent = Math.round(volumeLevel * 100);
+  const silent = muted || volumeLevel === 0;
+  if (audio) {
+    audio.volume = volumeLevel;
+    audio.muted = muted;
+  }
+  if (volumeSlider) {
+    volumeSlider.value = String(percent);
+    volumeSlider.setAttribute('aria-valuetext', `${percent}%`);
+  }
+  if (volumeValue) volumeValue.textContent = `${percent}%`;
+  if (muteButton) {
+    muteButton.textContent = silent ? '소리 켜기' : '음소거';
+    muteButton.setAttribute('aria-label', silent ? '소리 켜기' : '음소거');
+    muteButton.setAttribute('aria-pressed', String(silent));
+  }
 }
 
 function formatTime(value) {
@@ -352,6 +384,7 @@ if (waveform) {
 
 if (audio && deck && playButton && trackSelector) {
   audio.loop = false;
+  renderVolume();
   trackSelector.addEventListener('click', (event) => {
     const save = event.target.closest('[data-save]');
     if (save) toggleSavedTrack(Number(save.dataset.save));
@@ -371,6 +404,27 @@ if (audio && deck && playButton && trackSelector) {
     repeatMode = { off: 'all', all: 'one', one: 'off' }[repeatMode];
     renderControls();
     persistPreferences();
+  });
+  muteButton?.addEventListener('click', () => {
+    if (muted || volumeLevel === 0) {
+      if (volumeLevel === 0) volumeLevel = lastAudibleVolume;
+      muted = false;
+    } else muted = true;
+    renderVolume();
+    persistPreferences();
+    setStatus(muted ? '음소거했어요.' : `음량 ${Math.round(volumeLevel * 100)}%`);
+  });
+  volumeSlider?.addEventListener('input', () => {
+    volumeLevel = Math.min(1, Math.max(0, Number(volumeSlider.value) / 100));
+    if (volumeLevel > 0) {
+      lastAudibleVolume = volumeLevel;
+      muted = false;
+    }
+    renderVolume();
+    persistPreferences();
+  });
+  volumeSlider?.addEventListener('change', () => {
+    setStatus(volumeLevel === 0 ? '음량을 0%로 낮췄어요.' : `음량 ${Math.round(volumeLevel * 100)}%`);
   });
   previousButton?.addEventListener('click', () => advanceTrack(-1, !audio.paused));
   nextButton?.addEventListener('click', () => advanceTrack(1, !audio.paused));
