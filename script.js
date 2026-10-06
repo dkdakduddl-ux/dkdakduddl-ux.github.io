@@ -35,20 +35,125 @@ const trackPosition = document.querySelector('#track-position');
 const soundHeading = document.querySelector('#sound-heading');
 
 const tracks = [
-  { title: '내 검이 너에게 닿기까지', version: 'A', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_A', src: 'track-musinsa-a.MP3' },
-  { title: '내 검이 너에게 닿기까지', version: 'B', work: '무신 고려 제일검객들', heading: '무신 고려 제일검객들 OST_B', src: 'track-musinsa-b.MP3' },
-  { title: 'BLACKHOUNDS', version: 'A', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_A', src: 'track-frontis-a.MP3' },
-  { title: 'BLACKHOUNDS', version: 'B', work: 'FRONTIS 2042', heading: 'BLACKHOUNDS OST_B', src: 'track-frontis-b.MP3' },
-  { title: 'CODE BLACK', version: 'A', work: 'CODE BLACK', heading: 'CODE BLACK OST_A', src: 'track-codeblack-a.MP3' },
-  { title: 'CODE BLACK', version: 'B', work: 'CODE BLACK', heading: 'CODE BLACK OST_B', src: 'track-codeblack-b.MP3' },
-  { title: '내 남친은 사체술사', version: 'A', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_A', src: 'track-necromancer-1-a.MP3' },
-  { title: '내 남친은 사체술사', version: 'B', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_B', src: 'track-necromancer-1-b.MP3' },
-  { title: '남친이 죽은 나를 사랑한다', version: 'A', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_A', src: 'track-necromancer-2-a.MP3' },
-  { title: '남친이 죽은 나를 사랑한다', version: 'B', work: '내 남친은 사체술사', heading: '내 남친은 사체술사 OST_B', src: 'track-necromancer-2-b.MP3' },
-  { title: '수취인 불명 OST', version: 'A', work: '수취인 불명', heading: '수취인 불명 OST_A', src: 'track-recipient-a.MP3' },
-  { title: '수취인 불명 OST', version: 'B', work: '수취인 불명', heading: '수취인 불명 OST_B', src: 'track-recipient-b.MP3' },
-  { title: '수취인 불명 OST', version: 'C', work: '수취인 불명', heading: '수취인 불명 OST_C', src: 'track-recipient-c.MP3' },
-  { title: '수취인 불명 OST', version: 'D', work: '수취인 불명', heading: '수취인 불명 OST_D', src: 'track-recipient-d.MP3' }
+  {
+    "title": "내 검이 너에게 닿기까지",
+    "version": "A",
+    "work": "무신 고려 제일검객들",
+    "heading": "무신 고려 제일검객들 OST_A",
+    "src": "track-musinsa-a.MP3"
+  },
+  {
+    "title": "내 검이 너에게 닿기까지",
+    "version": "B",
+    "work": "무신 고려 제일검객들",
+    "heading": "무신 고려 제일검객들 OST_B",
+    "src": "track-musinsa-b.MP3"
+  },
+  {
+    "title": "BLACKHOUNDS",
+    "version": "A",
+    "work": "FRONTIS 2042",
+    "heading": "BLACKHOUNDS OST_A",
+    "src": "track-frontis-a.MP3"
+  },
+  {
+    "title": "BLACKHOUNDS",
+    "version": "B",
+    "work": "FRONTIS 2042",
+    "heading": "BLACKHOUNDS OST_B",
+    "src": "track-frontis-b.MP3"
+  },
+  {
+    "title": "CODE BLACK",
+    "version": "A",
+    "work": "CODE BLACK",
+    "heading": "CODE BLACK OST_A",
+    "src": "track-codeblack-a.MP3"
+  },
+  {
+    "title": "CODE BLACK",
+    "version": "B",
+    "work": "CODE BLACK",
+    "heading": "CODE BLACK OST_B",
+    "src": "track-codeblack-b.MP3"
+  },
+  {
+    "title": "내 남친은 사체술사",
+    "version": "A",
+    "work": "내 남친은 사체술사",
+    "heading": "내 남친은 사체술사 OST_A",
+    "src": "track-necromancer-1-a.MP3"
+  },
+  {
+    "title": "내 남친은 사체술사",
+    "version": "B",
+    "work": "내 남친은 사체술사",
+    "heading": "내 남친은 사체술사 OST_B",
+    "src": "track-necromancer-1-b.MP3"
+  },
+  {
+    "title": "남친이 죽은 나를 사랑한다",
+    "version": "A",
+    "work": "내 남친은 사체술사",
+    "heading": "내 남친은 사체술사 OST_A",
+    "src": "track-necromancer-2-a.MP3"
+  },
+  {
+    "title": "남친이 죽은 나를 사랑한다",
+    "version": "B",
+    "work": "내 남친은 사체술사",
+    "heading": "내 남친은 사체술사 OST_B",
+    "src": "track-necromancer-2-b.MP3"
+  },
+  {
+    "title": "수취인 불명 OST",
+    "version": "A",
+    "work": "수취인 불명",
+    "heading": "수취인 불명 OST_A",
+    "src": "track-recipient-a.MP3"
+  },
+  {
+    "title": "수취인 불명 OST",
+    "version": "B",
+    "work": "수취인 불명",
+    "heading": "수취인 불명 OST_B",
+    "src": "track-recipient-b.MP3"
+  },
+  {
+    "title": "수취인 불명 OST",
+    "version": "C",
+    "work": "수취인 불명",
+    "heading": "수취인 불명 OST_C",
+    "src": "track-recipient-c.MP3"
+  },
+  {
+    "title": "수취인 불명 OST",
+    "version": "D",
+    "work": "수취인 불명",
+    "heading": "수취인 불명 OST_D",
+    "src": "track-recipient-d.MP3"
+  },
+  {
+    "title": "BAD CLOVER",
+    "version": "OST",
+    "work": "BAD CLOVER：xoxo",
+    "heading": "BAD CLOVER：xoxo OST",
+    "src": "track-bad-clover.mp3"
+  },
+  {
+    "title": "아? 헤어지자고 하는 걸 깜빡했네?",
+    "version": "OST",
+    "work": "아? 헤어지자고 하는 걸 깜빡했네?",
+    "heading": "아? 헤어지자고 하는 걸 깜빡했네? OST",
+    "src": "track-forgot-breakup.mp3"
+  },
+  {
+    "title": "9멍 경매",
+    "version": "OST",
+    "work": "X못방의 9멍 경매",
+    "heading": "X못방의 9멍 경매 OST",
+    "src": "track-auction-room.mp3"
+  }
 ];
 
 const previousButton = document.querySelector('#previous-track');

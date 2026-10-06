@@ -1,5 +1,154 @@
 window.WORKS = [
   {
+    "id": "bad-clover",
+    "title": "BAD CLOVER：xoxo",
+    "summary": "「왕관은 아무나 쓰는 게 아니야. 잘못 올라오면 처박히는 거지.」",
+    "cover": "cover-bad-clover.webp",
+    "subtitle": "DOOMCHK",
+    "accent": "#92b65b",
+    "tags": [
+      "언세이프티"
+    ],
+    "links": [
+      {
+        "platform": "둠칫",
+        "status": "UNSAFE",
+        "url": "https://doomchk.com/worlds/11026"
+      }
+    ],
+    "documents": [
+      {
+        "src": "detail-bad-clover-01.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 1",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 1",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2100
+      },
+      {
+        "src": "detail-bad-clover-02.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 2",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 2",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2419
+      },
+      {
+        "src": "detail-bad-clover-03.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 3",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 3",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1868
+      },
+      {
+        "src": "detail-bad-clover-04.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 4",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 4",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2283
+      },
+      {
+        "src": "detail-bad-clover-05.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 5",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 5",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2489
+      },
+      {
+        "src": "detail-bad-clover-06.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 6",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 6",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2869
+      },
+      {
+        "src": "detail-bad-clover-07.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 7",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 7",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1497
+      },
+      {
+        "src": "detail-bad-clover-08.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 8",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 8",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1316
+      },
+      {
+        "src": "detail-bad-clover-09.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 9",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 9",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1261
+      },
+      {
+        "src": "detail-bad-clover-10.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 10",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 10",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1316
+      },
+      {
+        "src": "detail-bad-clover-11.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 11",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 11",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1261
+      },
+      {
+        "src": "detail-bad-clover-12.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 12",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 12",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 2485
+      },
+      {
+        "src": "detail-bad-clover-13.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 13",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 13",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1820
+      },
+      {
+        "src": "detail-bad-clover-14.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 14",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 14",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1188
+      },
+      {
+        "src": "detail-bad-clover-15.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 15",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 15",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1880
+      },
+      {
+        "src": "detail-bad-clover-16.png",
+        "alt": "BAD CLOVER：xoxo · 작품 소개 16",
+        "caption": "BAD CLOVER：xoxo · 작품 소개 16",
+        "layout": "sheet",
+        "width": 1080,
+        "height": 1083
+      }
+    ],
+    "continuousDocuments": true
+  },
+  {
     "id": "from-today",
     "title": "오늘부터 우리는",
     "summary": "X발 오늘부터 가족이라고?",
